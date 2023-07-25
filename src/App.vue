@@ -15,7 +15,7 @@
 
       <div class="right-nav">
         <!-- 登录链接 -->
-        <el-button class="el-button--primary" @click="handleLogin">登录</el-button>
+       <UserInfo></UserInfo>
       </div>
     </div>
 
@@ -29,19 +29,12 @@
 <script >
 import NavigationMenu from "@/views/NavigationMenu.vue";
 import SearchInput from "@/views/SearchInput.vue";
+import UserInfo from "@/views/UserInfo.vue";
 export default {
   name: 'AppleLikeComponent',
-  components: {SearchInput, NavigationMenu},
+  components: {UserInfo, SearchInput, NavigationMenu},
 };
 </script>
-<script setup>
-import { useRouter } from 'vue-router';
-const router = useRouter();
-const handleLogin = () => {
-  router.push({ path: '/login' });
-};
-</script>
-
 <style>
 .app {
   font-family: Arial, sans-serif;

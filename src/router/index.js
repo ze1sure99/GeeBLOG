@@ -33,12 +33,12 @@ const routes = [
     name: 'CreateEditBlog',
     component: CreateEditBlog,
   },{
-    path: '/Login',
+    path: '/login',
     name: 'Login',
     component:Login
   },
   {
-    path: '/Regist',
+    path: '/regist',
     name: 'Regist',
     component:Regist
   }
