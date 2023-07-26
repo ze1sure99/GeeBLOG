@@ -33,3 +33,5 @@ export async function getUserInfo() {
         throw new Error('获取用户信息失败'); // 或者返回其他合适的错误信息
     }
 }
+
+

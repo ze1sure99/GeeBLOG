@@ -1,108 +1,118 @@
 <template>
-  <div class="register-form-wrapper">
-    <h2 class="title">新用户注册</h2>
-    <el-form ref="registerForm" :model="form" :rules="rules" label-width="80px" class="register-form">
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" type="password" placeholder="请输入密码"></el-input>
-      </el-form-item>
-      <el-form-item label="确认密码" prop="confirmPassword">
-        <el-input v-model="form.confirmPassword" type="password" placeholder="请确认密码"></el-input>
-      </el-form-item>
-      <el-form-item label="昵称" prop="nickname">
-        <el-input v-model="form.nickname" placeholder="请输入昵称"></el-input>
-      </el-form-item>
-      <el-form-item class="el-form-item-content">
-        <el-button type="primary" @click="submitForm">注册</el-button>
-        &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-        <router-link to="/login">已有账号？去登录</router-link>
-      </el-form-item>
-    </el-form>
+  <div class="register-container">
+    <div class="register-form">
+      <h1 class="register-title">新用户注册</h1>
+      <el-form :model="formData" :rules="rules" ref="registerForm" label-width="100px">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="formData.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="formData.password"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="confirmPassword">
+          <el-input type="password" v-model="formData.confirmPassword"></el-input>
+        </el-form-item>
+        <el-form-item label="昵称" prop="nickname">
+          <el-input v-model="formData.nickname"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button class="zhuceanniu" type="primary" @click="handleSubmit(registerForm)">注册</el-button>
+        </el-form-item>
+      </el-form>
+      <p class="yiyouzhanghao">已有账号？<router-link to="/login">去登录</router-link></p>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
 import { ref } from 'vue';
 import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus';
+import { useRouter } from 'vue-router';
+// 修改标题
+import { usePageTitle } from '@/hooks/usePageTitle';
+usePageTitle('注册');
+// 导入src api 文件夹下的文件
+ import  { registerUser }  from '@/api/user';
+const router = useRouter();
+const registerForm = ref();
 
-export default {
-  components: {
-    ElForm,
-    ElFormItem,
-    ElInput,
-    ElButton,
-  },
-  setup() {
-    const form = ref({
-      username: '',
-      password: '',
-      confirmPassword: '',
-      nickname: '',
-    });
+const formData = ref({
+  username: '',
+  password: '',
+  confirmPassword: '',
+  nickname: '',
+});
 
-    const rules = {
-      username: [
-        { required: true, message: '请输入用户名', trigger: 'blur' },
-        { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名只能包含字母、数字和下划线', trigger: 'blur' },
-      ],
-      password: [
-        { required: true, message: '请输入密码', trigger: 'blur' },
-        { min: 5, max: 10, message: '密码长度在5-10个字符之间', trigger: 'blur' },
-      ],
-      confirmPassword: [
-        { required: true, message: '请确认密码', trigger: 'blur' },
-        {
-          validator: (rule, value, callback) => {
-            if (value === '') {
-              callback(new Error('请再次输入密码'));
-            } else if (value !== form.value.password) {
-              callback(new Error('两次输入密码不一致'));
-            } else {
-              callback();
-            }
-          },
-          trigger: 'blur',
-        },
-      ],
-      nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
-    };
-
-    const submitForm = () => {
-      const registerForm = ref.value;
-      registerForm.validate((valid) => {
-        if (valid) {
-          console.log('submit');
-        } else {
-          console.log('error submit');
-          return false;
-        }
-      });
-    };
-
-    return {
-      form,
-      rules,
-      submitForm,
-    };
-  },
+const rules = {
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { pattern: /^[A-Za-z0-9_]+$/, message: '用户名只能包含字母、数字和下划线', trigger: 'blur' },
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 5, max: 10, message: '密码长度应在5-10个字符之间', trigger: 'blur' },
+  ],
+  confirmPassword: [
+    { required: true, message: '请确认密码', trigger: 'blur' },
+    { validator: checkPassword, trigger: 'blur' },
+  ],
+  nickname: [
+    { required: true, message: '请输入昵称', trigger: 'blur' },
+  ],
 };
+
+function checkPassword(rule, value, callback) {
+  if (value === formData.value.password) {
+    callback();
+  } else {
+    callback(new Error('两次输入的密码不一致'));
+  }
+}
+
+function handleSubmit(formEl) {
+  formEl.validate((valid) => {
+    if (valid) {
+      // 表单校验通过，执行注册逻辑
+      registerUser(formData.value).then(() => {
+        // 注册成功，跳转到登录页面
+        router.push('/login');
+      });
+    } else {
+      // 表单校验失败
+    }
+  });
+}
 </script>
 
 <style scoped>
-.register-form-wrapper {
+.register-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 100vh;
 }
 
 .register-form {
   width: 400px;
-  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
-.el-form-item-content{
-  margin-left: 50px ;
-}
-</style>
 
+.register-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.yiyouzhanghao{
+  text-align: center;
+  margin-top: 20px;
+}
+
+.zhuceanniu{
+  margin-left: 50px;
+}
+
+</style>
