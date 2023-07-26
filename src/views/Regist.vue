@@ -25,15 +25,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {ref, watch} from 'vue';
 import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus';
 import { useRouter } from 'vue-router';
-// 修改标题
 import { usePageTitle } from '@/hooks/usePageTitle';
+import  { registerUser }  from '@/api/user';
+import { useUserStore } from '@/stores/user';
 usePageTitle('注册');
-// 导入src api 文件夹下的文件
- import  { registerUser }  from '@/api/user';
 const router = useRouter();
+
+const userStore = useUserStore();
+const userinfo = userStore.userinfo;
+// 监听userinfo 变化  如果有值 说明登录成功了  跳转到首页 如果没有值 说明登录失败了  提示用户 重新登录  或者注册
+watch(userinfo, (newVal) => {
+  if (newVal) {
+    router.push('/');
+  }
+},{immediate : true});
 const registerForm = ref();
 
 const formData = ref({

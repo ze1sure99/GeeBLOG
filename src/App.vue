@@ -26,14 +26,28 @@
   </div>
 </template>
 
-<script >
+<script setup>
 import NavigationMenu from "@/views/NavigationMenu.vue";
 import SearchInput from "@/views/SearchInput.vue";
 import UserInfo from "@/views/UserInfo.vue";
-export default {
-  name: 'AppleLikeComponent',
-  components: {UserInfo, SearchInput, NavigationMenu},
-};
+import { getUserInfo } from "@/api/user";
+import { useUserStore } from "@/stores/user";
+import { ref, onMounted } from 'vue';
+
+// 获取用户信息
+const userStore = useUserStore();
+const userinfo = ref(null);
+
+onMounted(async () => {
+  try {
+    const res = await getUserInfo();
+    console.log('res', res);
+    userinfo.value = res.data;
+    userStore.setUserinfo(res.data); // 设置用户信息 保存到 vuex 里面 以便全局使用
+  } catch (error) {
+    console.error('获取用户信息失败:', error);
+  }
+});
 </script>
 <style>
 .app {

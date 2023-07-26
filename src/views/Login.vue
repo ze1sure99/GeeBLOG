@@ -19,15 +19,25 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref , watch} from 'vue';
 import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus';
 import { useRouter } from 'vue-router';
-// 引用API中的loginUser方法
-import { loginUser } from '@/api/user';
-// 修改标题
 import { usePageTitle } from '@/hooks/usePageTitle';
-usePageTitle('登录');
+import { loginUser } from '@/api/user';
+import { useUserStore } from '@/stores/user';
 const router = useRouter();
+// 修改标题
+usePageTitle('登录');
+// 监听userinfo 变化  如果有值 说明登录成功了  跳转到首页 如果没有值 说明登录失败了  提示用户 重新登录  或者注册
+  const userStore = useUserStore();
+  const userinfo = userStore.userinfo;
+  // 监听userinfo.username
+  watch(userinfo, (newVal) => {
+    if (newVal) {
+      router.push('/');
+    }
+  },{immediate : true});
+
 // 定义loginForm
 const loginForm = ref();
 const formData = ref({
