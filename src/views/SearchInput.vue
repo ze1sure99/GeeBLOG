@@ -4,7 +4,13 @@
         v-model="keyword"
         placeholder="请输入搜索内容"
         @keyup.enter="handleSearch"
-    ></el-input>
+    >
+      <template #append>
+        <div class="search-button-container">
+        <el-button class="el-button--primary" @click="handleSearch">搜索</el-button>
+        </div>
+      </template>
+      </el-input>
   </div>
 </template>
 
@@ -32,8 +38,12 @@ const handleSearch = () => {
 };
 </script>
 
-<style>
+<style scoped>
 .search-input {
   padding: 10px;
+}
+.search-button-container {
+  display: flex;
+  align-items: center;
 }
 </style>

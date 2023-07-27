@@ -32,7 +32,7 @@ usePageTitle('登录');
   const userStore = useUserStore();
   const userinfo = userStore.userinfo;
   // 监听userinfo.username
-  watch(userinfo, (newVal) => {
+  watch(()=>userinfo.username, (newVal) => {
     if (newVal) {
       router.push('/');
     }

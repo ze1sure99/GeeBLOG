@@ -1,7 +1,8 @@
 <script setup>
 import { useUserStore } from '@/stores/user';
 import {RouterLink, useRouter} from 'vue-router'
-
+import { ArrowDown } from '@element-plus/icons-vue'
+import {Close, Edit, Files} from "@element-plus/icons";
 const router = useRouter();
 const userStore = useUserStore();
 const userinfo = userStore.userinfo;
@@ -18,30 +19,31 @@ const goToBlogManagement = () => {
 
 // 点击执行注销操作的函数
 const logout = () => {
-  // TODO: 在这里执行注销逻辑
+  // 清空用户信息
+  userStore.clearUserinfo();
+  // 清空token
+  localStorage.removeItem('token');
+  // 跳转到登录页面
+  router.push('/login');
 };
 </script>
 
 <template>
 <!--  判断userinfo.username 如果有 显示nickname 如果没有登录 显示登录按钮-->
-  <div class="userinfo">
-    <div class="userinfo&#45;&#45;login">
-      <div v-if="userinfo.username ">
-        <el-dropdown trigger="click">
-          <span class="nickname">{{userinfo.username}}</span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click="goToCreateEditBlog">创建博客</el-dropdown-item>
-            <el-dropdown-item @click="goToBlogManagement">我的博客</el-dropdown-item>
-            <el-dropdown-item @click="logout">注销</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-      <RouterLink v-else to="/Login">
-        <el-button class="el-button&#45;&#45;primary" >登录</el-button>
-      </RouterLink>
-    </div>
+  <div class="dropdown" v-if="userinfo.username">
+  <el-dropdown>
+    <el-button type="primary">{{userinfo.username}}<el-icon class="el-icon--right"><arrow-down /></el-icon>
+    </el-button>
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item @click="goToCreateEditBlog"><el-icon><Edit/></el-icon>创建博客</el-dropdown-item>
+        <el-dropdown-item @click="goToBlogManagement"><el-icon><Files/></el-icon>我的博客</el-dropdown-item>
+        <el-dropdown-item @click="logout"><el-icon><Close/></el-icon>注销</el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
+  </el-dropdown>
   </div>
-
+  <RouterLink v-else to="/login"><el-button class="el-button--primary">登录</el-button></RouterLink>
 
 </template>
 
