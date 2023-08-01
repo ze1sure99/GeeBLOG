@@ -41,7 +41,6 @@ const userinfo = ref(null);
 onMounted(async () => {
   try {
     const res = await getUserInfo();
-    console.log('res', res);
     userinfo.value = res.data;
     userStore.setUserinfo(res.data); // 设置用户信息 保存到 vuex 里面 以便全局使用
   } catch (error) {

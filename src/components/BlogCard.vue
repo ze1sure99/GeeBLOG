@@ -6,13 +6,13 @@
         <el-icon class="user-icon"><User/></el-icon>{{ blog.author }}
       </div>
       <div class="category">{{ blog.category }}</div>
-      <div class="time">{{ formatDate(blog.updatedTime) }}</div>
+      <div class="time">{{ formatDate(blog.createdAt) }}</div>
     </div>
 
     <!-- 中层 -->
     <div class="blog-card-content">
       <h2 class="title" @click="handleTitleClick">{{ blog.title }}</h2>
-      <p class="summary">{{ blog.summary }}</p>
+      <p class="summary">{{ blog.description }}</p>
     </div>
 
     <!-- 下层 -->
@@ -43,6 +43,7 @@ const props = defineProps({
     required: true,
   },
 });
+
 const router = useRouter();
 const isHovered = ref(false);
 
