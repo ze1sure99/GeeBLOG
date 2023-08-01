@@ -2,8 +2,10 @@
 import  instance  from './axios_instance';
 
 // 获取博客列表
-export async function getBlogList() {
-    return instance.get('/api/blogs');
+export async function getBlogList(opt = {}) {
+   const { page = 1, pageSize =3 ,category = '',keyword='' } = opt;
+   const url =  `/api/blogs?page=${page}&pageSize=${pageSize}&category=${category}&keyword=${keyword}`;
+    return instance.get(url);
 }
 
 // 获取博客详情

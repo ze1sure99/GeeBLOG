@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // 创建 axios 实例
 const instance = axios.create({
-    baseURL: 'https://www.fastmock.site/mock/6f62e591038e5923c12911048feb5b87', // 设置基础URL，根据实际情况修改
+    baseURL: 'http://localhost:3000', // 设置基础URL，根据实际情况修改
     timeout: 10000, // 设置请求超时时间，单位：毫秒
 });
 

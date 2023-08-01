@@ -26,7 +26,7 @@ export async function loginUser(userData) {
 // 获取用户信息
 export async function getUserInfo() {
     try {
-        const response = await instance.get('/api/user/info');
+        const response = await instance.get('/api/users/me');
         return response;
     } catch (error) {
         // 在此处处理错误
