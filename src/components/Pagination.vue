@@ -3,7 +3,7 @@
     <el-pagination
         :total="total"
         :page-size="pageSize"
-        :current-page.sync="currentPage"
+        v-model:current-page="currentPage"
         layout="prev, pager, next"
         @current-change="handleCurrentChange"
     />
