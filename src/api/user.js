@@ -15,7 +15,7 @@ export async function registerUser(userData) {
 // 用户登录
 export async function loginUser(userData) {
     try {
-        const response = await instance.post('/api/user/login', userData);
+        const response = await instance.post('/api/users/login', userData);
         return response;
     } catch (error) {
         // 在此处处理错误
